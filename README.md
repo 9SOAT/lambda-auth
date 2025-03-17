@@ -4,7 +4,7 @@ Este repositório contém uma AWS Lambda desenvolvida em **Java 21** como parte 
 
 ---
 
-## ✨ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - **Java 21** - Linguagem principal
 - **AWS Lambda** - Serviço de computação serverless
@@ -16,7 +16,7 @@ Este repositório contém uma AWS Lambda desenvolvida em **Java 21** como parte 
 
 ---
 
-## 🛠 Como Rodar Localmente
+## Como Rodar Localmente
 
 ### 1. Configuração Inicial
 
@@ -65,7 +65,7 @@ Ou com o Java:
 
 ---
 
-## 🏆 Como Funciona
+## Como Funciona
 
 1. O cliente faz uma requisição `POST /login` para a API Gateway.
 2. O API Gateway encaminha a requisição para a Lambda de autenticação.
@@ -76,7 +76,7 @@ Ou com o Java:
 
 ---
 
-## 🌐 Deploy com Terraform
+## Deploy com Terraform
 
 O Terraform gerencia o deploy da Lambda, o armazenamento no **S3**, permissões **IAM** e a configuração do **API Gateway**.
 
@@ -104,7 +104,7 @@ api_url = "https://<id>.execute-api.us-east-1.amazonaws.com/login"
 
 ---
 
-## 📑 Exemplo de Requisição
+## Exemplo de Requisição
 
 ### Requisição HTTP
 
@@ -124,7 +124,7 @@ curl -X POST https://<id>.execute-api.us-east-1.amazonaws.com/login \
 
 ---
 
-## 📉 Estrutura do Repositório
+## Estrutura do Repositório
 
 ```
 /
