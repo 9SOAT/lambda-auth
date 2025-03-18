@@ -30,7 +30,7 @@ jobs:
       - name: Inicializar Terraform
         run: |
           cd terraform
-          terraform init
+          terraform init -reconfigure
 
       - name: Destruir Lambda
         run: |
