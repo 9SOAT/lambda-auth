@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
-    bucket         = "terraform-state-fiap-soat-auth"
-    key            = "infra/terraform.tfstate"
+    bucket         = "fast-food-terraform-state"
+    key            = "lambda-auth/terraform.tfstate"
     region         = "us-east-1"
     encrypt        = true
   }
@@ -13,7 +13,7 @@ provider "aws" {
 
 # Nome do bucket onde o .jar será armazenado
 variable "s3_bucket_builds" {
-  default = "lambda-build-fiap-soat-auth"
+  default = "fast-food-lambda-jar"
 }
 
 # Nome do arquivo .jar existente
@@ -31,7 +31,6 @@ resource "aws_s3_object" "lambda_jar" {
   source = var.local_jar_path
   etag = fileexists(var.local_jar_path) ? filemd5(var.local_jar_path) : null
 }
-
 
 # Criar uma Role para a Lambda
 resource "aws_iam_role" "lambda_role" {
@@ -98,7 +97,7 @@ resource "aws_lambda_function" "auth_lambda" {
 
 # Buscar API Gateway existente
 data "aws_apigatewayv2_api" "existing_api" {
-  api_id = "vqxay3q1i1"
+  api_id = "w63bgg7nk6"
 }
 
 # Criar integração com a Lambda no API Gateway existente
