@@ -59,8 +59,6 @@ resource "aws_iam_policy" "lambda_policy" {
       {
         Effect = "Allow",
         Action = [
-          "secretsmanager:GetSecretValue",
-          "secretsmanager:DescribeSecret",
           "dynamodb:GetItem",
           "logs:CreateLogGroup",
           "logs:CreateLogStream",

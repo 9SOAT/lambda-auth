@@ -8,14 +8,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.GetItemResponse;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
-import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
-import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueRequest;
-import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueResponse;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
@@ -25,7 +21,7 @@ import java.util.HashMap;
 
 public class AuthWithDynamoDB implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
-    private static final String SECRET_KEY = getSecretKeyFromAWS();
+    private static final String SECRET_KEY = "c66b463c-376f-452b-8a7e-b17491518828";
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final String TABLE_NAME = "fast-food-consumer";
 
@@ -56,7 +52,7 @@ public class AuthWithDynamoDB implements RequestHandler<APIGatewayProxyRequestEv
                 return generateResponse(404, "CPF não encontrado no banco de dados");
             }
 
-            String token = generateJwt(cpf, consumerId);
+            String token = gerarJWT(cpf, consumerId);
             Map<String, String> responseBody = new HashMap<>();
             responseBody.put("token", String.format("Bearer %s", token));
 
@@ -95,7 +91,7 @@ public class AuthWithDynamoDB implements RequestHandler<APIGatewayProxyRequestEv
         return null;
     }
 
-    private String generateJwt(String cpf, String consumerId) {
+    private String gerarJWT(String cpf, String consumerId) {
         Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 
         return Jwts.builder()
@@ -111,24 +107,5 @@ public class AuthWithDynamoDB implements RequestHandler<APIGatewayProxyRequestEv
                 .withStatusCode(statusCode)
                 .withHeaders(Map.of("Content-Type", "application/json"))
                 .withBody(body);
-    }
-
-    private static String getSecretKeyFromAWS() {
-        SecretsManagerClient client = SecretsManagerClient.builder()
-                .region(Region.US_EAST_1)
-                .build();
-
-        GetSecretValueRequest request = GetSecretValueRequest.builder()
-                .secretId("jwt-secret-key")
-                .build();
-
-        GetSecretValueResponse getSecretValueResponse;
-        try {
-            getSecretValueResponse = client.getSecretValue(request);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao recuperar segredo do AWS Secrets Manager", e);
-        }
-
-        return getSecretValueResponse.secretString();
     }
 }
