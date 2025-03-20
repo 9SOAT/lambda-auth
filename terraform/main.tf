@@ -89,7 +89,6 @@ resource "aws_lambda_function" "auth_lambda" {
   s3_bucket        = var.s3_bucket_builds
   s3_key           = aws_s3_object.lambda_jar.key
   timeout          = 30
-  memory_size      = 2048
 
   environment {
     variables = {
