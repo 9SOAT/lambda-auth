@@ -133,7 +133,6 @@ curl -X POST https://<id>.execute-api.us-east-1.amazonaws.com/login \
 │   │   └── AuthWithDynamoDB.java
 │   ├── pom.xml           # Dependências do Maven
 │   └── target/           # Build da Lambda
-│
 ├── terraform/            # Terraform para infraestrutura
 │   └── main.tf           # Configuração da Lambda e API Gateway
 ├── README.md             # Documentação
