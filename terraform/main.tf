@@ -91,7 +91,7 @@ resource "aws_lambda_function" "auth_lambda" {
 
   environment {
     variables = {
-      TABLE_NAME = "fast-food-consumer"
+      TABLE_NAME = "consumer"
     }
   }
 }
