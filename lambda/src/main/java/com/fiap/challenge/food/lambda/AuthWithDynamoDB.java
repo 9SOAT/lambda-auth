@@ -23,7 +23,7 @@ public class AuthWithDynamoDB implements RequestHandler<APIGatewayProxyRequestEv
 
     private static final String SECRET_KEY = "c66b463c-376f-452b-8a7e-b17491518828";
     private static final ObjectMapper objectMapper = new ObjectMapper();
-    private static final String TABLE_NAME = "fast-food-consumer";
+    private static final String TABLE_NAME = "consumer";
 
     private final DynamoDbClient dynamoDbClient = DynamoDbClient.create();
 
