@@ -47,12 +47,12 @@ public class AuthWithDynamoDB implements RequestHandler<APIGatewayProxyRequestEv
                 return generateResponse(401, "CPF inválido");
             }
 
-            String consumerId = buscarConsumerIdNoDynamoDB(cpf);
+            String consumerId = buscarConsumerCpfNoDynamoDB(cpf);
             if (consumerId == null) {
                 return generateResponse(404, "CPF não encontrado no banco de dados");
             }
 
-            String token = gerarJWT(cpf, consumerId);
+            String token = gerarJWT(cpf);
             Map<String, String> responseBody = new HashMap<>();
             responseBody.put("token", String.format("Bearer %s", token));
 
@@ -64,7 +64,7 @@ public class AuthWithDynamoDB implements RequestHandler<APIGatewayProxyRequestEv
         }
     }
 
-    private String buscarConsumerIdNoDynamoDB(String cpf) {
+    private String buscarConsumerCpfNoDynamoDB(String cpf) {
         Map<String, AttributeValue> key = new HashMap<>();
         key.put("cpf", AttributeValue.builder().s(cpf).build());
 
@@ -78,25 +78,19 @@ public class AuthWithDynamoDB implements RequestHandler<APIGatewayProxyRequestEv
         System.out.println("DynamoDB Response: " + response);
 
         if (response.hasItem()) {
-            Map<String, AttributeValue> item = response.item();
-            if (item.containsKey("consumer_id")) {
-                return item.get("consumer_id").n();
-            } else {
-                System.out.println("CPF encontrado, mas sem consumer_id associado.");
-            }
+            return response.item().get("cpf").s();
         } else {
             System.out.println("Nenhum item encontrado para o CPF: " + cpf);
+            return null;
         }
-
-        return null;
     }
 
-    private String gerarJWT(String cpf, String consumerId) {
+    private String gerarJWT(String cpf) {
         Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 
         return Jwts.builder()
                 .setSubject(cpf)
-                .claim("consumer_id", consumerId)
+                .claim("cpf", cpf)
                 .setExpiration(new Date(System.currentTimeMillis() + 3600000))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
